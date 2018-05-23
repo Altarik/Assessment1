@@ -1,0 +1,81 @@
+﻿@model TUIFlightManager.Models.Flight
+
+@{
+    ViewBag.Title = "Flight details";
+}
+
+<h2>Flight details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CodeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodeName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartureName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DepartureName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DestinationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DestinationName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Aircraft.DisplayName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aircraft.DisplayName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FlightDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FlightDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Distance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Distance)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FuelConsumption)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FuelConsumption)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModificatonDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModificatonDate)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TuiDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Aircraft">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ManufacturerName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AircraftName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SeatsAmount" Type="numeric" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="FuelConsumptionPerDistance" Type="numeric" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="TakeoffEffort" Type="numeric" Precision="8" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Airport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Location" Type="geography" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CodeName" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="DepartureAirportId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DestinationAirportId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AircraftId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FuelConsumption" Type="numeric" Precision="9" Scale="4" Nullable="false" />
+          <Property Name="Distance" Type="numeric" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="FlightDate" Type="datetime" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" />
+          <Property Name="ModificatonDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Flight_ToAircraft">
+          <End Role="Aircraft" Type="Self.Aircraft" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Aircraft">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="AircraftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_ToAirportDeparture">
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="DepartureAirportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_ToAirportDestination">
+          <End Role="Airport" Type="Self.Airport" Multiplicity="1" />
+          <End Role="Flight" Type="Self.Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="DestinationAirportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TuiDBModelStoreContainer">
+          <EntitySet Name="Aircraft" EntityType="Self.Aircraft" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Airport" EntityType="Self.Airport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Flight" EntityType="Self.Flight" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Flight_ToAircraft" Association="Self.FK_Flight_ToAircraft">
+            <End Role="Aircraft" EntitySet="Aircraft" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_ToAirportDeparture" Association="Self.FK_Flight_ToAirportDeparture">
+            <End Role="Airport" EntitySet="Airport" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_ToAirportDestination" Association="Self.FK_Flight_ToAirportDestination">
+            <End Role="Airport" EntitySet="Airport" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TuiDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Aircraft">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ManufacturerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AircraftName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SeatsAmount" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="FuelConsumptionPerDistance" Type="Decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="TakeoffEffort" Type="Decimal" Precision="8" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Flight" Relationship="TuiDBModel.FK_Flight_ToAircraft" FromRole="Aircraft" ToRole="Flight" />
+        </EntityType>
+        <EntityType Name="Airport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Location" Type="Geography" Nullable="false" />
+          <NavigationProperty Name="Flight" Relationship="TuiDBModel.FK_Flight_ToAirportDeparture" FromRole="Airport" ToRole="Flight" />
+          <NavigationProperty Name="Flight1" Relationship="TuiDBModel.FK_Flight_ToAirportDestination" FromRole="Airport" ToRole="Flight" />
+        </EntityType>
+        <EntityContainer Name="TuiDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Aircraft" EntityType="Self.Aircraft" />
+          <EntitySet Name="Airport" EntityType="Self.Airport" />
+          <EntitySet Name="Flight" EntityType="TuiDBModel.Flight" />
+          <AssociationSet Name="FK_Flight_ToAircraft" Association="TuiDBModel.FK_Flight_ToAircraft">
+            <End Role="Aircraft" EntitySet="Aircraft" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_ToAirportDeparture" Association="TuiDBModel.FK_Flight_ToAirportDeparture">
+            <End Role="Airport" EntitySet="Airport" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Flight_ToAirportDestination" Association="TuiDBModel.FK_Flight_ToAirportDestination">
+            <End Role="Airport" EntitySet="Airport" />
+            <End Role="Flight" EntitySet="Flight" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Flight">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="CodeName" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="DepartureAirportId" Type="Guid" Nullable="false" />
+          <Property Name="DestinationAirportId" Type="Guid" Nullable="false" />
+          <Property Name="AircraftId" Type="Guid" Nullable="false" />
+          <Property Name="FuelConsumption" Type="Decimal" Nullable="false" Precision="9" Scale="4" />
+          <Property Name="Distance" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="FlightDate" Type="DateTime" Precision="3" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModificatonDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Aircraft" Relationship="TuiDBModel.FK_Flight_ToAircraft" FromRole="Flight" ToRole="Aircraft" />
+          <NavigationProperty Name="DepartureAirport" Relationship="TuiDBModel.FK_Flight_ToAirportDeparture" FromRole="Flight" ToRole="Airport" />
+          <NavigationProperty Name="DestinationAirport" Relationship="TuiDBModel.FK_Flight_ToAirportDestination" FromRole="Flight" ToRole="Airport" />
+        </EntityType>
+        <Association Name="FK_Flight_ToAircraft">
+          <End Type="TuiDBModel.Aircraft" Role="Aircraft" Multiplicity="1" />
+          <End Type="TuiDBModel.Flight" Role="Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Aircraft">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="AircraftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_ToAirportDeparture">
+          <End Type="TuiDBModel.Airport" Role="Airport" Multiplicity="1" />
+          <End Type="TuiDBModel.Flight" Role="Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="DepartureAirportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Flight_ToAirportDestination">
+          <End Type="TuiDBModel.Airport" Role="Airport" Multiplicity="1" />
+          <End Type="TuiDBModel.Flight" Role="Flight" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Airport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Flight">
+              <PropertyRef Name="DestinationAirportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TuiDBModelStoreContainer" CdmEntityContainer="TuiDbEntities">
+          <EntitySetMapping Name="Aircraft">
+            <EntityTypeMapping TypeName="TuiDBModel.Aircraft">
+              <MappingFragment StoreEntitySet="Aircraft">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="AircraftName" ColumnName="AircraftName" />
+                <ScalarProperty Name="SeatsAmount" ColumnName="SeatsAmount" />
+                <ScalarProperty Name="FuelConsumptionPerDistance" ColumnName="FuelConsumptionPerDistance" />
+                <ScalarProperty Name="TakeoffEffort" ColumnName="TakeoffEffort" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Airport">
+            <EntityTypeMapping TypeName="TuiDBModel.Airport">
+              <MappingFragment StoreEntitySet="Airport">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Flight">
+            <EntityTypeMapping TypeName="TuiDBModel.Flight">
+              <MappingFragment StoreEntitySet="Flight">
+                <ScalarProperty Name="ModificatonDate" ColumnName="ModificatonDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="FlightDate" ColumnName="FlightDate" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="FuelConsumption" ColumnName="FuelConsumption" />
+                <ScalarProperty Name="AircraftId" ColumnName="AircraftId" />
+                <ScalarProperty Name="DestinationAirportId" ColumnName="DestinationAirportId" />
+                <ScalarProperty Name="DepartureAirportId" ColumnName="DepartureAirportId" />
+                <ScalarProperty Name="CodeName" ColumnName="CodeName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
